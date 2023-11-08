@@ -38,5 +38,8 @@ In this project, I will use this data to predict whether or not it will rain the
 | RainToday     | Boolean: 1 if precipitation (mm) in the 24 hours to 9am exceeds 1mm, otherwise 0                                       | 'str'           |
 | RainTomorrow  | The amount of next day rain in mm. Used to create response variable RainTomorrow. A kind of measure of the "risk".     | 'str'           |
 
+* The dataset has missing values
+* Numeric and categorical values
+
 ## 1.2. DATA VISUALIZATION AND CLEANING
-!["Rain Tomorrow" statistic](./Images/RainTomorrow.png "Hello world")
+!["Rain Tomorrow" statistic](./Images/RainTomorrow.png)
