@@ -2,7 +2,7 @@
 ## 1.1. About Dataset
 
 ### 1.1.1. Source & Acknowledgements
-Dataset: https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package/data
+Dataset: [weather dataset](https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package/data)
 Copyright Commonwealth of Australia 2010, Bureau of Meteorology.
 
 ### 1.1.2. Content
@@ -37,4 +37,5 @@ In this project, I will use this data to predict whether or not it will rain the
 * RainTomorrow - The amount of next day rain in mm. Used to create response variable RainTomorrow. A kind of measure of the "risk".
 
 ## 1.2. DATA VISUALIZATION AND CLEANING
-!["Rain Tomorrow" statistic](./Images/RainTomorrow.png)
+!["Rain Tomorrow" statistic](./Images/RainTomorrow.png "Hello world"){text="Rain Tomorrow" statistic}
+sadas
