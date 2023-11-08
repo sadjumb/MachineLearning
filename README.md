@@ -43,5 +43,5 @@ In this project, I will use this data to predict whether or not it will rain the
 
 ## 1.2. DATA VISUALIZATION AND CLEANING
 !["Rain Tomorrow" statistic](./Images/RainTomorrow.png)
-
+a
 !["Correlation matrix"](./Images/corrMatrix.png)
