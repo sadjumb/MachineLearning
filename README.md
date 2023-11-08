@@ -1,12 +1,15 @@
 # MachineLearning
-## About Dataset: 
+## About Dataset
+
+### Source & Acknowledgements
 Dataset: https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package/data
+Copyright Commonwealth of Australia 2010, Bureau of Meteorology.
 
 ### Content
-This dataset contains about 10 years of daily weather observations from many locations across Australia.
+The dataset contains about 10 years of daily weather observations from different locations across Australia. Observations were drawn from numerous weather stations.
 
 ### Task
-RainTomorrow is the target variable to predict. It means -- did it rain the next day, Yes or No? This column is Yes if the rain for that day was 1mm or more.
+In this project, I will use this data to predict whether or not it will rain the next day. There are 23 attributes including the target variable "RainTomorrow", indicating whether or not it will rain the next day or not.
 
 ### Data description
 * Date - The date of observation;
@@ -32,3 +35,6 @@ RainTomorrow is the target variable to predict. It means -- did it rain the next
 * Temp3pm - Temperature (degrees C) at 3pm
 * RainToday - Boolean: 1 if precipitation (mm) in the 24 hours to 9am exceeds 1mm, otherwise 0
 * RainTomorrow - The amount of next day rain in mm. Used to create response variable RainTomorrow. A kind of measure of the "risk".
+
+## DATA VISUALIZATION AND CLEANING
+
