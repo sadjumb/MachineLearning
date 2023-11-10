@@ -41,7 +41,21 @@ In this project, I will use this data to predict whether or not it will rain the
 * The dataset has missing values
 * Numeric and categorical values
 
+
+
+
 ## 1.2. DATA VISUALIZATION AND CLEANING
+  Categorical variables: ['Date', 'Location', 'WindGustDir', 'WindDir9am', 'WindDir3pm', 'RainToday', 'RainTomorrow']
+  | variables    | Missing values |
+  | ------------ | -------------- |
+  | Date         | 0              |
+  | Location     | 0              |
+  | WindGustDir  | 10326          |
+  | WindDir9am   | 10566          |
+  | WindDir3pm   | 4228           |
+  | RainToday    | 3261           |
+  | RainTomorrow | 3267           |
+
 !["Rain Tomorrow" statistic](./Images/RainTomorrow.png)
 
 
