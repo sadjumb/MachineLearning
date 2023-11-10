@@ -56,6 +56,7 @@ In this project, I will use this data to predict whether or not it will rain the
   | RainToday    | 3261           |
   | RainTomorrow | 3267           |
 
+
 !["Rain Tomorrow" statistic](./Images/RainTomorrow.png)
 
 

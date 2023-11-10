@@ -86,7 +86,6 @@ def exploreCategoricalV(df: pd.DataFrame, missingValues: bool = False):
     print('Location contains', location, 'labels')
 
     pd.get_dummies(df.Location, drop_first=True)
-    print(df)
     
     #binary = {'Yes': 1, 'No' : 0}
     #data = df.replace({'RainTomorrow' : binary, 'RainToday' : binary})

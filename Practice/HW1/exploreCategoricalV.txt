@@ -1,16 +1,2 @@
 The categorical variables are : ['Location', 'WindGustDir', 'WindDir9am', 'WindDir3pm', 'RainToday', 'RainTomorrow']
 Location contains {'Canberra': 3436, 'Sydney': 3344, 'Darwin': 3193, 'Melbourne': 3193, 'Brisbane': 3193, 'Adelaide': 3193, 'Perth': 3193, 'Hobart': 3193, 'Albany': 3040, 'MountGambier': 3040, 'Ballarat': 3040, 'Townsville': 3040, 'GoldCoast': 3040, 'Cairns': 3040, 'Launceston': 3040, 'AliceSprings': 3040, 'Bendigo': 3040, 'Albury': 3040, 'MountGinini': 3040, 'Wollongong': 3040, 'Newcastle': 3039, 'Tuggeranong': 3039, 'Penrith': 3039, 'Woomera': 3009, 'Nuriootpa': 3009, 'Cobar': 3009, 'CoffsHarbour': 3009, 'Moree': 3009, 'Sale': 3009, 'PerthAirport': 3009, 'PearceRAAF': 3009, 'Witchcliffe': 3009, 'BadgerysCreek': 3009, 'Mildura': 3009, 'NorfolkIsland': 3009, 'MelbourneAirport': 3009, 'Richmond': 3009, 'SydneyAirport': 3009, 'WaggaWagga': 3009, 'Williamtown': 3009, 'Dartmoor': 3009, 'Watsonia': 3009, 'Portland': 3009, 'Walpole': 3006, 'NorahHead': 3004, 'SalmonGums': 3001, 'Katherine': 1578, 'Nhil': 1578, 'Uluru': 1578} labels
-        Day  Month  Year Location  ...  Temp9am  Temp3pm  RainToday  RainTomorrow
-0         1     12  2008   Albury  ...     16.9     21.8         No            No
-1         2     12  2008   Albury  ...     17.2     24.3         No            No
-2         3     12  2008   Albury  ...     21.0     23.2         No            No
-3         4     12  2008   Albury  ...     18.1     26.5         No            No
-4         5     12  2008   Albury  ...     17.8     29.7         No            No
-...     ...    ...   ...      ...  ...      ...      ...        ...           ...
-145455   21      6  2017    Uluru  ...     10.1     22.4         No            No
-145456   22      6  2017    Uluru  ...     10.9     24.5         No            No
-145457   23      6  2017    Uluru  ...     12.5     26.1         No            No
-145458   24      6  2017    Uluru  ...     15.1     26.0         No            No
-145459   25      6  2017    Uluru  ...     15.0     20.9         No           NaN
-
-[145460 rows x 25 columns]
