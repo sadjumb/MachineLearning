@@ -10,13 +10,6 @@ from sklearn.model_selection import train_test_split
 import seaborn as sns
 import numpy as np
 import pandas as pd
-#from keras.layers import Dense, BatchNormalization, Dropout, LSTM
-#from keras.models import Sequential
-#from keras.utils import to_categorical
-#from keras.optimizers import Adam
-#from tensorflow.keras import regularizers
-#from sklearn.metrics import precision_score, recall_score, confusion_matrix, classification_report, accuracy_score, f1_score
-#from keras import callbacks
 from dateutil.parser import parse
 import datetime as dt
 
