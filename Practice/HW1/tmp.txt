@@ -1,0 +1,99 @@
+
+Before filling missing values:
+|Location     	 |       0	|
+|WindGustDir  	 |   10326	|
+|WindDir9am   	 |   10566	|
+|WindDir3pm   	 |    4228	|
+|RainToday    	 |    3261	|
+|RainTomorrow 	 |    3267	|
+
+After filling missing values:
+Location 0
+WindGustDir 0
+WindDir9am 0
+WindDir3pm 0
+RainToday 0
+RainTomorrow 0
+
+
+Before filling missing values:
+|MinTemp      	 |    1485	|
+|MaxTemp      	 |    1261	|
+|Rainfall     	 |    3261	|
+|Evaporation  	 |   62790	|
+|Sunshine     	 |   69835	|
+|WindGustSpeed	 |   10263	|
+|WindSpeed9am 	 |    1767	|
+|WindSpeed3pm 	 |    3062	|
+|Humidity9am  	 |    2654	|
+|Humidity3pm  	 |    4507	|
+|Pressure9am  	 |   15065	|
+|Pressure3pm  	 |   15028	|
+|Cloud9am     	 |   55888	|
+|Cloud3pm     	 |   59358	|
+|Temp9am      	 |    1767	|
+|Temp3pm      	 |    3609	|
+
+After filling missing values:
+MinTemp 0
+MaxTemp 0
+Rainfall 0
+Evaporation 0
+Sunshine 0
+WindGustSpeed 0
+WindSpeed9am 0
+WindSpeed3pm 0
+Humidity9am 0
+Humidity3pm 0
+Pressure9am 0
+Pressure3pm 0
+Cloud9am 0
+Cloud3pm 0
+Temp9am 0
+Temp3pm 0
+
+                  count          mean       std       min       25%       50%  \
+Location       145460.0  7.815677e-18  1.000003 -1.672228 -0.899139  0.014511   
+MinTemp        145460.0 -4.501830e-16  1.000003 -3.250525 -0.705659 -0.030170   
+MaxTemp        145460.0  3.001220e-16  1.000003 -3.952405 -0.735852 -0.086898   
+Rainfall       145460.0  7.815677e-18  1.000003 -0.275097 -0.275097 -0.275097   
+Evaporation    145460.0 -3.282584e-17  1.000003 -1.629472 -0.371139 -0.119472   
+Sunshine       145460.0 -5.424080e-16  1.000003 -2.897217  0.076188  0.148710   
+WindGustDir    145460.0  6.252542e-18  1.000003 -1.724209 -0.872075  0.193094   
+WindGustSpeed  145460.0  1.824961e-16  1.000003 -2.588407 -0.683048 -0.073333   
+WindDir9am     145460.0  7.190423e-17  1.000003 -1.550000 -0.885669  0.000105   
+WindDir3pm     145460.0  8.284618e-17  1.000003 -1.718521 -0.837098  0.044324   
+WindSpeed9am   145460.0  5.627287e-17  1.000003 -1.583291 -0.793380 -0.116314   
+WindSpeed3pm   145460.0  6.565169e-17  1.000003 -2.141841 -0.650449  0.037886   
+Humidity9am    145460.0  2.250915e-16  1.000003 -3.654212 -0.631189  0.058273   
+Humidity3pm    145460.0 -8.440931e-17  1.000003 -2.518329 -0.710918  0.021816   
+Pressure9am    145460.0 -4.314254e-16  1.000003 -5.520544 -0.616005 -0.006653   
+Pressure3pm    145460.0  5.027043e-15  1.000003 -5.724832 -0.622769 -0.007520   
+Cloud9am       145460.0 -1.016038e-16  1.000003 -2.042425 -0.727490  0.149133   
+Cloud3pm       145460.0  7.346736e-17  1.000003 -2.235619 -0.336969  0.137693   
+Temp9am        145460.0  7.503050e-17  1.000003 -3.750358 -0.726764 -0.044517   
+Temp3pm        145460.0 -6.877796e-17  1.000003 -3.951301 -0.725322 -0.083046   
+RainToday      145460.0 -8.988029e-18  1.000003 -0.529795 -0.529795 -0.529795   
+
+                    75%        max  
+Location       0.857881   1.701250  
+MinTemp        0.723865   3.410112  
+MaxTemp        0.703133   3.510563  
+Rainfall      -0.203581  43.945571  
+Evaporation    0.006361  43.985108  
+Sunshine       0.257494   2.360634  
+WindGustDir    1.045228   1.471296  
+WindGustSpeed  0.460168   7.243246  
+WindDir9am     0.885879   1.771653  
+WindDir3pm     0.925747   1.586813  
+WindSpeed9am   0.560752  13.086472  
+WindSpeed3pm   0.611499   7.839016  
+Humidity9am    0.747734   1.649338  
+Humidity3pm    0.656852   2.366565  
+Pressure9am    0.617561   3.471111  
+Pressure3pm    0.622735   3.653960  
+Cloud9am       0.587445   1.902380  
+Cloud3pm       0.612356   2.036343  
+Temp9am        0.699753   3.599302  
+Temp3pm        0.661411   3.653834  
+RainToday     -0.529795   1.887521  

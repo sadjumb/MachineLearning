@@ -1,0 +1,16 @@
+
+Before filling missing values:
+Location 0
+WindGustDir 10326
+WindDir9am 10566
+WindDir3pm 4228
+RainToday 3261
+RainTomorrow 3267
+
+After filling missing values:
+Location 0
+WindGustDir 0
+WindDir9am 0
+WindDir3pm 0
+RainToday 0
+RainTomorrow 0
