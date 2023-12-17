@@ -1,17 +1,14 @@
-from telnetlib import DM
 import matplotlib.pyplot as plt
-from networkx import cartesian_product
 import seaborn as sns
-import datetime
 from sklearn.preprocessing import LabelEncoder
 from sklearn import preprocessing
-from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 import seaborn as sns
-import numpy as np
 import pandas as pd
 from dateutil.parser import parse
-import datetime as dt
+import numpy as np
 
 
 def dropCategoricalFeatures(df):
@@ -185,7 +182,57 @@ def prepairingAttributes(df, PATH_IMAGES):
 
     features = droppingOutlier(features, target)
     plotOutliers(features, PATH_IMAGES, 'withoutOutliers')
+
+    return features
+
+
+def SelectionOfHyperparameters(X_train, y_train):
+    nnb = np.arange(1, 30, 2)
+    knn = KNeighborsClassifier()
+    grid = GridSearchCV(knn, param_grid = {'n_neighbors': nnb}, cv=10)
+    grid.fit(X_train, y_train)
+
+    #best_cv_err = 1 - grid.best_score_
+    best_n_neighbors = grid.best_estimator_.n_neighbors
+    #print(f"best_cv_err: {best_cv_err}")
+    print(f"best_n_neighbors: {best_n_neighbors}")
+    return best_n_neighbors
+
+
+def createTrainTest(features):
+    X = features.drop(["RainTomorrow"], axis=1)
+    y = features["RainTomorrow"]
+
+    # Splitting test and training sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
+    print(f"X.shape - {X.shape}")
+    return X, y, X_train, X_test, y_train, y_test
+
+
+def run(features):
+    X, y, X_train, X_test, y_train, y_test = createTrainTest(features)
+
+    best_n_neighbors = SelectionOfHyperparameters(X_train, y_train)
     
+    knn = KNeighborsClassifier(n_neighbors = best_n_neighbors).fit(X_train, y_train)
+    y_test_predict = knn.predict(X_test)
+    err_train = np.mean(y_train != knn.predict(X_train))
+    err_test  = np.mean(y_test  != knn.predict(X_test))
+    print(f'err_test - {err_test}')
+    print(f'err_train - {err_train}')
+
+
+
+def describe(df, dfWithoutCategorical, PATH_IMAGES):
+    plotRainTomorrow(df, PATH_IMAGES)
+    exploreCategoricalV(df)
+    corrMatrix(dfWithoutCategorical, PATH_IMAGES)
+
+    df.describe(include = ['object']).to_csv('describeCategorical.csv')
+    df.describe(include = 'all').to_csv('describeAll.csv')
+    dfWithoutCategorical.describe(include='all').to_csv('describeWithoutCategorical.csv')
+
+    scatterMatrix(df, PATH_IMAGES)
 
 
 if __name__ == "__main__":
@@ -193,26 +240,17 @@ if __name__ == "__main__":
 
     PATH_IMAGES = '/home/makar/Python/MachineLearning/Images/'
     df = pd.read_csv("../../DataSet/weatherAUS.csv", engine='python')
-    
-    #plotRainTomorrow(df, PATH_IMAGES)
 
     df = parseDate(df)
     dfWithoutCategorical = dropCategoricalFeatures(df)
 
-    #exploreCategoricalV(df)
-    
-    #corrMatrix(dfWithoutCategorical, PATH_IMAGES)
+    describe(df, dfWithoutCategorical, PATH_IMAGES)
 
-    #df.describe(include = ['object']).to_csv('describeCategorical.csv')
-    #df.describe(include = 'all').to_csv('describeAll.csv')
-    #dfWithoutCategorical.describe(include='all').to_csv('describeWithoutCategorical.csv')
-
-    #scatterMatrix(df, PATH_IMAGES)
-    
     df = missingValuesCategorical(df)
     df = missingValuesNumerical(df)
 
-    prepairingAttributes(df, PATH_IMAGES)
+    df = prepairingAttributes(df, PATH_IMAGES)
+    run(df)
 
     
     

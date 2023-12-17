@@ -113,3 +113,56 @@ In this project, I will use this data to predict whether or not it will rain the
   !["Outliers"](./Images/withOutliers.png)
   We need drop outliers...
   !["Outliers"](./Images/withoutOutliers.png)
+
+## 1.4. Model building
+  Train test split:
+  ```python
+def createTrainTest(features):
+    X = features.drop(["RainTomorrow"], axis=1)
+    y = features["RainTomorrow"]
+
+    # Splitting test and training sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
+    print(f"X.shape - {X.shape}")
+    return X, y, X_train, X_test, y_train, y_test
+  ```
+
+  X.shape - (127536, 21)
+best_n_neighbors: 19
+err_test - 0.15781082564491258
+err_train - 0.1442061047325679
+  Selection of hyperparameters:
+```
+def SelectionOfHyperparameters(X_train, y_train):
+    nnb = np.arange(1, 30, 2)
+    knn = KNeighborsClassifier()
+    grid = GridSearchCV(knn, param_grid = {'n_neighbors': nnb}, cv=10)
+    grid.fit(X_train, y_train)
+
+    #best_cv_err = 1 - grid.best_score_
+    best_n_neighbors = grid.best_estimator_.n_neighbors
+    #print(f"best_cv_err: {best_cv_err}")
+    print(f"best_n_neighbors: {best_n_neighbors}")
+    return best_n_neighbors
+```
+  Best n neighbors = 19
+
+  Run algorithm:
+```
+def run(features):
+    X, y, X_train, X_test, y_train, y_test = createTrainTest(features)
+
+    best_n_neighbors = SelectionOfHyperparameters(X_train, y_train)
+    
+    knn = KNeighborsClassifier(n_neighbors = best_n_neighbors).fit(X_train, y_train)
+    y_test_predict = knn.predict(X_test)
+    err_train = np.mean(y_train != knn.predict(X_train))
+    err_test  = np.mean(y_test  != knn.predict(X_test))
+    print(f'err_test - {err_test}')
+    print(f'err_train - {err_train}')
+
+```
+
+  Error test KNN = 0.15781082564491258
+  Error test KNN = 0.15781082564491258
+
