@@ -1,4 +1,4 @@
-# 1. MachineLearning
+# 1. MachineLearning (HW 4)
 ## 1.1. About Dataset
 
 ### 1.1.1. Source & Acknowledgements
@@ -128,11 +128,11 @@ def createTrainTest(features):
   ```
 
   X.shape - (127536, 21)
-best_n_neighbors: 19
-err_test - 0.15781082564491258
-err_train - 0.1442061047325679
+
+
+## 1.5. KNN
   Selection of hyperparameters:
-```
+```python
 def SelectionOfHyperparameters(X_train, y_train):
     nnb = np.arange(1, 30, 2)
     knn = KNeighborsClassifier()
@@ -148,7 +148,7 @@ def SelectionOfHyperparameters(X_train, y_train):
   Best n neighbors = 19
 
   Run algorithm:
-```
+```python
 def run(features):
     X, y, X_train, X_test, y_train, y_test = createTrainTest(features)
 
@@ -164,5 +164,8 @@ def run(features):
 ```
 
   Error test KNN = 0.15781082564491258
+  
   Error test KNN = 0.15781082564491258
 
+# 2. HW 6
+## 2.5. Logistic Regression 

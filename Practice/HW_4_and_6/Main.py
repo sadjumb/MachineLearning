@@ -1,22 +1,15 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.preprocessing import LabelEncoder
+import pandas as pd
+import numpy as np
+from dateutil.parser import parse
 from sklearn import preprocessing
+from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
-import seaborn as sns
-import pandas as pd
-from dateutil.parser import parse
-import numpy as np
 
-
-def dropCategoricalFeatures(df):
-    binary = {'Yes': 1, 'No' : 0}
-    data = df.replace({'RainTomorrow' : binary, 'RainToday' : binary})
-    categorical = categoricalV(df)
-    data = data.drop(categorical, axis=1)
-    return data
 
 
 def plotRainTomorrow(df: pd.DataFrame, PATH_IMAGES: str):
@@ -40,6 +33,7 @@ def plotOutliers(features: pd.DataFrame, PATH_IMAGES: str, NAMEFILE: str):
 
     fig.savefig(PATH_IMAGES + f'{NAMEFILE}.png')
     plt.close()
+
 
 def corrMatrix(data: pd.DataFrame, PATH_IMAGES: str):
     corrmat = data.corr()
@@ -67,16 +61,38 @@ def numericV(data):# Get list of numeric variables
     object_cols = list(s[s].index)
     return object_cols
 
+
 def categoricalV(data):# Get list of categorical variables
     s = (data.dtypes == "object")
     object_cols = list(s[s].index)
     return object_cols
 
 
+def dropCategoricalFeatures(df):
+    binary = {'Yes': 1, 'No' : 0}
+    data = df.replace({'RainTomorrow' : binary, 'RainToday' : binary})
+    categorical = categoricalV(df)
+    data = data.drop(categorical, axis=1)
+    return data
+
+
+
 def scatterMatrix(data: pd.DataFrame, PATH_IMAGES: str):
     pd.plotting.scatter_matrix(data, alpha=0.01, figsize=(10,10))
     plt.savefig(PATH_IMAGES + 'scatterMatrix.png')
     plt.close()
+
+
+def describe(df, dfWithoutCategorical, PATH_IMAGES):
+    plotRainTomorrow(df, PATH_IMAGES)
+    exploreCategoricalV(df)
+    corrMatrix(dfWithoutCategorical, PATH_IMAGES)
+
+    df.describe(include = ['object']).to_csv('describeCategorical.csv')
+    df.describe(include = 'all').to_csv('describeAll.csv')
+    dfWithoutCategorical.describe(include='all').to_csv('describeWithoutCategorical.csv')
+
+    scatterMatrix(df, PATH_IMAGES)
 
 
 def exploreCategoricalV(df: pd.DataFrame, missingValues: bool = False):
@@ -161,6 +177,7 @@ def droppingOutlier(features, target):
     features = features[(features["Temp3pm"]<2.3)&(features["Temp3pm"]>-2)]
     return features
 
+
 # Prepairing attributes of scale data 
 def prepairingAttributes(df, PATH_IMAGES):
     # Apply label encoder to each column with categorical data
@@ -186,6 +203,16 @@ def prepairingAttributes(df, PATH_IMAGES):
     return features
 
 
+def createTrainTest(features):
+    X = features.drop(["RainTomorrow"], axis=1)
+    y = features["RainTomorrow"]
+
+    # Splitting test and training sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
+    print(f"X.shape - {X.shape}")
+    return X, y, X_train, X_test, y_train, y_test
+
+
 def SelectionOfHyperparameters(X_train, y_train):
     nnb = np.arange(1, 30, 2)
     knn = KNeighborsClassifier()
@@ -199,17 +226,7 @@ def SelectionOfHyperparameters(X_train, y_train):
     return best_n_neighbors
 
 
-def createTrainTest(features):
-    X = features.drop(["RainTomorrow"], axis=1)
-    y = features["RainTomorrow"]
-
-    # Splitting test and training sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
-    print(f"X.shape - {X.shape}")
-    return X, y, X_train, X_test, y_train, y_test
-
-
-def run(features):
+def runKNN(features):
     X, y, X_train, X_test, y_train, y_test = createTrainTest(features)
 
     best_n_neighbors = SelectionOfHyperparameters(X_train, y_train)
@@ -222,18 +239,9 @@ def run(features):
     print(f'err_train - {err_train}')
 
 
-
-def describe(df, dfWithoutCategorical, PATH_IMAGES):
-    plotRainTomorrow(df, PATH_IMAGES)
-    exploreCategoricalV(df)
-    corrMatrix(dfWithoutCategorical, PATH_IMAGES)
-
-    df.describe(include = ['object']).to_csv('describeCategorical.csv')
-    df.describe(include = 'all').to_csv('describeAll.csv')
-    dfWithoutCategorical.describe(include='all').to_csv('describeWithoutCategorical.csv')
-
-    scatterMatrix(df, PATH_IMAGES)
-
+def runLogisticRegression(features):
+    1
+    
 
 if __name__ == "__main__":
     pd.options.display.max_columns = 15
@@ -250,7 +258,4 @@ if __name__ == "__main__":
     df = missingValuesNumerical(df)
 
     df = prepairingAttributes(df, PATH_IMAGES)
-    run(df)
-
-    
-    
+    #runKNN(df)
