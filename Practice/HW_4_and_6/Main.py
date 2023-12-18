@@ -7,14 +7,16 @@ from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
-
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
 
 
 def plotRainTomorrow(df: pd.DataFrame, PATH_IMAGES: str):
     plt.close()
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(20,10))
     ax.bar(x=['No', 'Yes'], height=[df[df["RainTomorrow"] == "No"]["RainTomorrow"].count(), df[df["RainTomorrow"] == "Yes"]["RainTomorrow"].count()],\
            color=['red', 'green'])
     ax.set_title("Rain Tomorrow")
@@ -26,10 +28,23 @@ def plotOutliers(features: pd.DataFrame, PATH_IMAGES: str, NAMEFILE: str):
     plt.close()
 
     fig, ax = plt.subplots(figsize=(20,10))
-
     sns.boxenplot(data = features)
     plt.xticks(rotation=90)
     ax.set_title("Outliers")
+
+    fig.savefig(PATH_IMAGES + f'{NAMEFILE}.png')
+    plt.close()
+
+
+def plotConfusionMatrix(cm, PATH_IMAGES: str, NAMEFILE: str):
+    plt.close()
+
+    cm_matrix = pd.DataFrame(data=cm, columns=['Actual Positive:1', 'Actual Negative:0'], 
+                                     index=['Predict Positive:1', 'Predict Negative:0'])
+
+    fig, ax = plt.subplots(figsize=(20,10))
+    sns.heatmap(cm_matrix, annot=True, fmt='d', cmap='YlGnBu')
+    ax.set_title("Confusion Matrix")
 
     fig.savefig(PATH_IMAGES + f'{NAMEFILE}.png')
     plt.close()
@@ -74,7 +89,6 @@ def dropCategoricalFeatures(df):
     categorical = categoricalV(df)
     data = data.drop(categorical, axis=1)
     return data
-
 
 
 def scatterMatrix(data: pd.DataFrame, PATH_IMAGES: str):
@@ -213,35 +227,101 @@ def createTrainTest(features):
     return X, y, X_train, X_test, y_train, y_test
 
 
-def SelectionOfHyperparameters(X_train, y_train):
+def selectionOfHyperparametersKNN(X_train, y_train):
     nnb = np.arange(1, 30, 2)
     knn = KNeighborsClassifier()
     grid = GridSearchCV(knn, param_grid = {'n_neighbors': nnb}, cv=10)
     grid.fit(X_train, y_train)
 
     #best_cv_err = 1 - grid.best_score_
-    best_n_neighbors = grid.best_estimator_.n_neighbors # type: ignore
+    #best_n_neighbors = grid.best_estimator_.n_neighbors 
     #print(f"best_cv_err: {best_cv_err}")
-    print(f"best_n_neighbors: {best_n_neighbors}")
-    return best_n_neighbors
+
+    print(f"best_n_neighbors KNN: {grid.best_estimator_.n_neighbors}") # type: ignore
+    return grid.best_estimator_.n_neighbors # type: ignore
 
 
-def runKNN(features):
-    X, y, X_train, X_test, y_train, y_test = createTrainTest(features)
+def selectionOfHyperparametersLR(X_train, y_train):
+    parameters = [{'penalty':['l1','l2']}, 
+              {'C':[1, 5, 10, 15, 20, 30, 40, 50, 100]}]
 
-    best_n_neighbors = SelectionOfHyperparameters(X_train, y_train)
+    logreg = LogisticRegression(solver='liblinear')
+    grid = GridSearchCV(logreg, param_grid = parameters, cv = 5)
+
+    grid.fit(X_train, y_train)
+
+    print('GridSearch CV best score : {:.4f}\n\n'.format(grid.best_score_))
+    print('Parameters that give the best results :','\n\n', (grid.best_params_))
+    print()
+    print('Estimator that was chosen by the search :','\n\n', (grid.best_estimator_))
+
+    return grid.best_estimator_.penalty, grid.best_estimator_.C # type: ignore
+
+
+def checkAccuracy(model, X_train, X_test, y_train, y_test, y_test_predict):
+    #err_test  = np.mean(y_test  != knn.predict(X_test))
+    err_test = accuracy_score(y_test, y_test_predict)
+
+    #err_train = np.mean(y_train != knn.predict(X_train))
+    err_train = accuracy_score(y_train, model.predict(X_train))
+
+    print('Model accuracy score: {0:0.4f}'. format(err_test))
+    print('Training-set accuracy score: {0:0.4f}'. format(err_train))
+
+
+#Check for overfitting and underfitting
+def checkOverfitting(model, X_train, X_test, y_train, y_test, y_test_predict):
+    print("\nCheck for overfitting and underfitting: ")
+    print('Training set score: {:.4f}'.format(model.score(X_train, y_train)))
+    print('Test set score: {:.4f}'.format(model.score(X_test, y_test)))
+
+
+def confusionMatrix(y_test, y_test_predict, PATH_IMAGES, NAMEFILE):
+    cm = confusion_matrix(y_test, y_test_predict)
+    print('Confusion matrix\n\n', cm)
+    print('\nTrue Positives(TP) = ', cm[0,0])
+    print('\nTrue Negatives(TN) = ', cm[1,1])
+    print('\nFalse Positives(FP) = ', cm[0,1])
+    print('\nFalse Negatives(FN) = ', cm[1,0])
+    plotConfusionMatrix(cm, PATH_IMAGES, NAMEFILE)
+
+
+def runKNN(features, PATH_IMAGES):
+    _, _, X_train, X_test, y_train, y_test = createTrainTest(features)
+
+    best_n_neighbors = selectionOfHyperparametersKNN(X_train, y_train)
     
-    knn = KNeighborsClassifier(n_neighbors = best_n_neighbors).fit(X_train, y_train)
+    knn = KNeighborsClassifier(n_neighbors=best_n_neighbors).fit(X_train, y_train)
     y_test_predict = knn.predict(X_test)
-    err_train = np.mean(y_train != knn.predict(X_train))
-    err_test  = np.mean(y_test  != knn.predict(X_test))
-    print(f'err_test - {err_test}')
-    print(f'err_train - {err_train}')
+
+    checkAccuracy(knn, X_train, X_test, y_train, y_test, y_test_predict)
+    checkOverfitting(knn, X_train, X_test, y_train, y_test, y_test_predict)
+    confusionMatrix(y_test, y_test_predict, PATH_IMAGES, 'confusionMatrixKNN')
 
 
-def runLogisticRegression(features):
-    1
-    
+def runLogisticRegression(features, PATH_IMAGES):
+    _, _, X_train, X_test, y_train, y_test = createTrainTest(features)
+
+    penalty, c = selectionOfHyperparametersLR(X_train, y_train)
+
+    logreg = LogisticRegression(penalty=penalty, C=c, solver='liblinear').fit(X_train, y_train)
+
+    y_test_predict = logreg.predict(X_test)
+    checkAccuracy(logreg, X_train, X_test, y_train, y_test, y_test_predict)
+    checkOverfitting(logreg, X_train, X_test, y_train, y_test, y_test_predict)
+    confusionMatrix(y_test, y_test_predict, PATH_IMAGES, 'confusionMatrixLR')
+
+
+def runRandomForest(features, PATH_IMAGES):
+    _, _, X_train, X_test, y_train, y_test = createTrainTest(features)
+
+    rf = RandomForestClassifier(n_estimators=20).fit(X_train, y_train)
+
+    y_test_predict = rf.predict(X_test)
+    checkAccuracy(rf, X_train, X_test, y_train, y_test, y_test_predict)
+    checkOverfitting(rf, X_train, X_test, y_train, y_test, y_test_predict)
+    confusionMatrix(y_test, y_test_predict, PATH_IMAGES, 'confusionMatrixRF')
+
 
 if __name__ == "__main__":
     pd.options.display.max_columns = 15
@@ -258,4 +338,6 @@ if __name__ == "__main__":
     df = missingValuesNumerical(df)
 
     df = prepairingAttributes(df, PATH_IMAGES)
-    #runKNN(df)
+    runKNN(df, PATH_IMAGES)
+    #runLogisticRegression(df, PATH_IMAGES)
+    #runRandomForest(df, PATH_IMAGES)

@@ -100,6 +100,21 @@ Temp9am        0.699753   3.599302
 Temp3pm        0.661411   3.653834  
 RainToday     -0.529795   1.887521  
 X.shape - (127536, 21)
-best_n_neighbors: 19
-err_test - 0.15781082564491258
-err_train - 0.1442061047325679
+Model accuracy score: 0.8496
+Training-set accuracy score: 0.9961
+
+Check for overfitting and underfitting: 
+Training set score: 0.9961
+Test set score: 0.8496
+Confusion matrix
+
+ [[28735  1381]
+ [ 4375  3770]]
+
+True Positives(TP) =  28735
+
+True Negatives(TN) =  3770
+
+False Positives(FP) =  1381
+
+False Negatives(FN) =  4375

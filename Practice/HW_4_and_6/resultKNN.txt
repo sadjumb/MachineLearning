@@ -1,3 +1,5 @@
+The categorical variables are : ['Location', 'WindGustDir', 'WindDir9am', 'WindDir3pm', 'RainToday', 'RainTomorrow']
+Location contains {'Canberra': 3436, 'Sydney': 3344, 'Darwin': 3193, 'Melbourne': 3193, 'Brisbane': 3193, 'Adelaide': 3193, 'Perth': 3193, 'Hobart': 3193, 'Albany': 3040, 'MountGambier': 3040, 'Ballarat': 3040, 'Townsville': 3040, 'GoldCoast': 3040, 'Cairns': 3040, 'Launceston': 3040, 'AliceSprings': 3040, 'Bendigo': 3040, 'Albury': 3040, 'MountGinini': 3040, 'Wollongong': 3040, 'Newcastle': 3039, 'Tuggeranong': 3039, 'Penrith': 3039, 'Woomera': 3009, 'Nuriootpa': 3009, 'Cobar': 3009, 'CoffsHarbour': 3009, 'Moree': 3009, 'Sale': 3009, 'PerthAirport': 3009, 'PearceRAAF': 3009, 'Witchcliffe': 3009, 'BadgerysCreek': 3009, 'Mildura': 3009, 'NorfolkIsland': 3009, 'MelbourneAirport': 3009, 'Richmond': 3009, 'SydneyAirport': 3009, 'WaggaWagga': 3009, 'Williamtown': 3009, 'Dartmoor': 3009, 'Watsonia': 3009, 'Portland': 3009, 'Walpole': 3006, 'NorahHead': 3004, 'SalmonGums': 3001, 'Katherine': 1578, 'Nhil': 1578, 'Uluru': 1578} labels
 
 Before filling missing values:
 |Location     	 |       0	|
@@ -98,6 +100,22 @@ Temp9am        0.699753   3.599302
 Temp3pm        0.661411   3.653834  
 RainToday     -0.529795   1.887521  
 X.shape - (127536, 21)
-best_n_neighbors: 19
-err_test - 0.15781082564491258
-err_train - 0.1442061047325679
+best_n_neighbors KNN: 19
+Model accuracy score: 0.8422
+Training-set accuracy score: 0.8558
+
+Check for overfitting and underfitting: 
+Training set score: 0.8558
+Test set score: 0.8422
+Confusion matrix
+
+ [[28758  1358]
+ [ 4680  3465]]
+
+True Positives(TP) =  28758
+
+True Negatives(TN) =  3465
+
+False Positives(FP) =  1358
+
+False Negatives(FN) =  4680

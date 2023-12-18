@@ -1,8 +1,0 @@
-|Date         |       0 |
-|Location     |       0 |
-|WindGustDir  |   10326 |
-|WindDir9am   |   10566 |
-|WindDir3pm   |    4228 |
-|RainToday    |    3261 |
-|RainTomorrow |    3267 |
-dtype: int64

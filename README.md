@@ -129,43 +129,250 @@ def createTrainTest(features):
 
   X.shape - (127536, 21)
 
+### 1.5. Confusion matrix
+Four types of outcomes are possible while evaluating a classification model performance:
 
-## 1.5. KNN
+True Positives (TP) – True Positives occur when we predict an observation belongs to a certain class and the observation actually belongs to that class.
+
+True Negatives (TN) – True Negatives occur when we predict an observation does not belong to a certain class and the observation actually does not belong to that class.
+
+False Positives (FP) – False Positives occur when we predict an observation belongs to a certain class but the observation actually does not belong to that class. This type of error is called Type I error.
+
+False Negatives (FN) – False Negatives occur when we predict an observation does not belong to a certain class but the observation actually belongs to that class. This is a very serious error and it is called Type II error.
+
+
+## 2. KNN
   Selection of hyperparameters:
+
 ```python
-def SelectionOfHyperparameters(X_train, y_train):
+def selectionOfHyperparametersKNN(X_train, y_train):
     nnb = np.arange(1, 30, 2)
     knn = KNeighborsClassifier()
     grid = GridSearchCV(knn, param_grid = {'n_neighbors': nnb}, cv=10)
     grid.fit(X_train, y_train)
 
     #best_cv_err = 1 - grid.best_score_
-    best_n_neighbors = grid.best_estimator_.n_neighbors
+    #best_n_neighbors = grid.best_estimator_.n_neighbors 
     #print(f"best_cv_err: {best_cv_err}")
-    print(f"best_n_neighbors: {best_n_neighbors}")
-    return best_n_neighbors
+
+    print(f"best_n_neighbors KNN: {grid.best_estimator_.n_neighbors}") # type: ignore
+    return grid.best_estimator_.n_neighbors # type: ignore
 ```
   Best n neighbors = 19
 
   Run algorithm:
+
 ```python
-def run(features):
+def runKNN(features):
     X, y, X_train, X_test, y_train, y_test = createTrainTest(features)
 
-    best_n_neighbors = SelectionOfHyperparameters(X_train, y_train)
+    best_n_neighbors = selectionOfHyperparametersKNN(X_train, y_train)
     
-    knn = KNeighborsClassifier(n_neighbors = best_n_neighbors).fit(X_train, y_train)
+    knn = KNeighborsClassifier(n_neighbors=best_n_neighbors).fit(X_train, y_train)
     y_test_predict = knn.predict(X_test)
-    err_train = np.mean(y_train != knn.predict(X_train))
-    err_test  = np.mean(y_test  != knn.predict(X_test))
-    print(f'err_test - {err_test}')
-    print(f'err_train - {err_train}')
 
+    checkAccuracy(knn, X_train, X_test, y_train, y_test, y_test_predict)
+    checkOverfitting(knn, X_train, X_test, y_train, y_test, y_test_predict)
 ```
 
-  Error test KNN = 0.15781082564491258
-  
-  Error test KNN = 0.15781082564491258
+Accuracy:
 
-# 2. HW 6
-## 2.5. Logistic Regression 
+```python
+def checkAccuracy(model, X_train, X_test, y_train, y_test, y_test_predict):
+    #err_test  = np.mean(y_test  != knn.predict(X_test))
+    err_test = accuracy_score(y_test, y_test_predict)
+
+    #err_train = np.mean(y_train != knn.predict(X_train))
+    err_train = accuracy_score(y_train, model.predict(X_train))
+
+    print('Model accuracy score: {0:0.4f}'. format(err_test))
+    print('Training-set accuracy score: {0:0.4f}'. format(err_train))
+```
+Model accuracy score: 0.8422
+
+Training-set accuracy score: 0.8558
+
+Check for overfitting and underfitting: 
+```python
+def checkOverfitting(model, X_train, X_test, y_train, y_test, y_test_predict):
+    print("\nCheck for overfitting and underfitting: ")
+    print('Training set score: {:.4f}'.format(model.score(X_train, y_train)))
+    print('Test set score: {:.4f}'.format(model.score(X_test, y_test)))
+```
+
+Training set score: 0.8558
+
+Test set score: 0.8422
+
+Confusion matrix: 
+$$
+\begin{bmatrix}
+28758 & 1358 \\
+4680 & 3465 \\
+\end{bmatrix}
+$$
+
+True Positives(TP) =  28758
+
+True Negatives(TN) =  3465
+
+False Positives(FP) =  1358
+
+False Negatives(FN) =  4680
+
+!["Confusion matrix"](./Images/confusionMatrixKNN.png)
+
+# 3. HW 6
+## 3.1. Logistic Regression
+  Selection of hyperparameters:
+
+```python
+def selectionOfHyperparametersLR(X_train, y_train):
+    parameters = [{'penalty':['l1','l2']}, 
+              {'C':[1, 5, 10, 15, 20, 30, 40, 50, 100]}]
+
+    logreg = LogisticRegression(solver='liblinear')
+    grid = GridSearchCV(logreg, param_grid = parameters, cv = 5)
+
+    grid.fit(X_train, y_train)
+
+    print('GridSearch CV best score : {:.4f}\n\n'.format(grid.best_score_))
+    print('Parameters that give the best results :','\n\n', (grid.best_params_))
+    print()
+    print('Estimator that was chosen by the search :','\n\n', (grid.best_estimator_))
+
+    return grid.best_estimator_.penalty, grid.best_estimator_.C # type: ignore
+```
+  Best penalty = l2
+
+  Best C = 1.0
+
+  Run algorithm:
+
+```python
+def runLogisticRegression(features, PATH_IMAGES):
+    _, _, X_train, X_test, y_train, y_test = createTrainTest(features)
+
+    penalty, c = selectionOfHyperparametersLR(X_train, y_train)
+    logreg = LogisticRegression(penalty=penalty, C=c, solver='liblinear').fit(X_train, y_train)
+
+    y_test_predict = logreg.predict(X_test)
+    checkAccuracy(logreg, X_train, X_test, y_train, y_test, y_test_predict)
+    checkOverfitting(logreg, X_train, X_test, y_train, y_test, y_test_predict)
+    confusionMatrix(y_test, y_test_predict, PATH_IMAGES, 'confusionMatrixLR')
+```
+
+Accuracy:
+
+```python
+def checkAccuracy(model, X_train, X_test, y_train, y_test, y_test_predict):
+    #err_test  = np.mean(y_test  != knn.predict(X_test))
+    err_test = accuracy_score(y_test, y_test_predict)
+
+    #err_train = np.mean(y_train != knn.predict(X_train))
+    err_train = accuracy_score(y_train, model.predict(X_train))
+
+    print('Model accuracy score: {0:0.4f}'. format(err_test))
+    print('Training-set accuracy score: {0:0.4f}'. format(err_train))
+```
+Model accuracy score: 0.8448
+
+Training-set accuracy score: 0.8437
+
+Check for overfitting and underfitting:
+
+```python
+def checkOverfitting(model, X_train, X_test, y_train, y_test, y_test_predict):
+    print("\nCheck for overfitting and underfitting: ")
+    print('Training set score: {:.4f}'.format(model.score(X_train, y_train)))
+    print('Test set score: {:.4f}'.format(model.score(X_test, y_test)))
+```
+
+Training set score: 0.8437
+
+Test set score: 0.8448
+
+Confusion matrix: 
+$$
+\begin{bmatrix}
+28522 & 1594 \\
+4343 & 3802 \\
+\end{bmatrix}
+$$
+
+True Positives(TP) =  28522
+
+True Negatives(TN) =  3802
+
+False Positives(FP) =  1594
+
+False Negatives(FN) =  4343
+
+!["Confusion matrix"](./Images/confusionMatrixLR.png)
+
+1. The logistic regression model accuracy score is 0.8448. So, the model does a very good job in predicting whether or not it will rain tomorrow in Australia.
+2. Small number of observations predict that there will be rain tomorrow. Majority of observations predict that there will be no rain tomorrow.
+3. The model shows no signs of overfitting.
+
+## 3.2 Random Forest
+ Run algorithm:
+
+```python
+def runRandomForest(features, PATH_IMAGES):
+    _, _, X_train, X_test, y_train, y_test = createTrainTest(features)
+
+    rf = RandomForestClassifier(n_estimators=20).fit(X_train, y_train)
+
+    y_test_predict = rf.predict(X_test)
+    checkAccuracy(rf, X_train, X_test, y_train, y_test, y_test_predict)
+    checkOverfitting(rf, X_train, X_test, y_train, y_test, y_test_predict)
+    confusionMatrix(y_test, y_test_predict, PATH_IMAGES, 'confusionMatrixRF')
+```
+
+Accuracy:
+
+```python
+def checkAccuracy(model, X_train, X_test, y_train, y_test, y_test_predict):
+    #err_test  = np.mean(y_test  != knn.predict(X_test))
+    err_test = accuracy_score(y_test, y_test_predict)
+
+    #err_train = np.mean(y_train != knn.predict(X_train))
+    err_train = accuracy_score(y_train, model.predict(X_train))
+
+    print('Model accuracy score: {0:0.4f}'. format(err_test))
+    print('Training-set accuracy score: {0:0.4f}'. format(err_train))
+```
+Model accuracy score: 0.8496
+
+Training-set accuracy score: 0.9961
+
+Check for overfitting and underfitting:
+
+```python
+def checkOverfitting(model, X_train, X_test, y_train, y_test, y_test_predict):
+    print("\nCheck for overfitting and underfitting: ")
+    print('Training set score: {:.4f}'.format(model.score(X_train, y_train)))
+    print('Test set score: {:.4f}'.format(model.score(X_test, y_test)))
+```
+
+Training set score: 0.9961
+
+Test set score: 0.8496
+
+Confusion matrix: 
+$$
+\begin{bmatrix}
+28735 & 1381 \\
+4375 & 3770 \\
+\end{bmatrix}
+$$
+
+True Positives(TP) =  28735
+
+True Negatives(TN) =  3770
+
+False Positives(FP) =  1381
+
+False Negatives(FN) =  4375
+
+!["Confusion matrix"](./Images/confusionMatrixRF.png)
