@@ -220,7 +220,7 @@ def SelectionOfHyperparameters(X_train, y_train):
     grid.fit(X_train, y_train)
 
     #best_cv_err = 1 - grid.best_score_
-    best_n_neighbors = grid.best_estimator_.n_neighbors
+    best_n_neighbors = grid.best_estimator_.n_neighbors # type: ignore
     #print(f"best_cv_err: {best_cv_err}")
     print(f"best_n_neighbors: {best_n_neighbors}")
     return best_n_neighbors
