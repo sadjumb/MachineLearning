@@ -164,6 +164,5 @@ def run(features):
 ```
 
   Error test KNN = 0.15781082564491258
-  
   Error test KNN = 0.15781082564491258
 
