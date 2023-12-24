@@ -79,8 +79,10 @@ In this project, I will use this data to predict whether or not it will rain the
 
 !["Rain Tomorrow" statistic](./Images/RainTomorrow.png)
 
+!["Min Max" temp](Images/MinMaxTemp.png)
 
 !["Correlation matrix"](./Images/corrMatrix.png)
+
 
 ## 1.3. DATA PREPROCESSING
 ### 1.3.1. Describe value

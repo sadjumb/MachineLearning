@@ -36,6 +36,14 @@ def plotOutliers(features: pd.DataFrame, PATH_IMAGES: str, NAMEFILE: str):
     plt.close()
 
 
+def vizualization(df: pd.DataFrame, PATH_IMAGES: str):
+    plt.close()
+    fig, ax = plt.subplots(figsize=(20,10))
+    sns.scatterplot(x = 'MaxTemp', y = 'MinTemp', hue = 'RainTomorrow', palette = 'viridis', data = df)
+    fig.savefig(PATH_IMAGES + f'MinMaxTemp.png')
+    plt.close()
+
+
 def plotConfusionMatrix(cm, PATH_IMAGES: str, NAMEFILE: str):
     plt.close()
 
@@ -323,6 +331,7 @@ def runRandomForest(features, PATH_IMAGES):
     confusionMatrix(y_test, y_test_predict, PATH_IMAGES, 'confusionMatrixRF')
 
 
+
 if __name__ == "__main__":
     pd.options.display.max_columns = 15
 
@@ -338,6 +347,7 @@ if __name__ == "__main__":
     df = missingValuesNumerical(df)
 
     df = prepairingAttributes(df, PATH_IMAGES)
-    runKNN(df, PATH_IMAGES)
+    vizualization(df, PATH_IMAGES)
+    #runKNN(df, PATH_IMAGES)
     #runLogisticRegression(df, PATH_IMAGES)
     #runRandomForest(df, PATH_IMAGES)
